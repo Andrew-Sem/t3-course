@@ -1,7 +1,7 @@
 import { SignOutButton, useUser } from "@clerk/nextjs";
 import { ArrowRightOnRectangleIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
-import { FC } from "react";
+import type { FC } from "react";
 
 export const Header: FC = () => {
   const { user } = useUser();

@@ -1,13 +1,13 @@
 import Head from "next/head";
 import Image from "next/image";
-import { RouterOutputs, api } from "~/utils/api";
+import { api } from "~/utils/api";
+import type { RouterOutputs } from "~/utils/api";
 import { SignIn, useUser } from "@clerk/nextjs";
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import { Header } from "~/components/Header";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { Loader, LoadingPage } from "~/components/UI/loading";
-import { TRPCError } from "@trpc/server";
+import { LoadingPage } from "~/components/UI/loading";
 
 dayjs.extend(relativeTime);
 
@@ -36,13 +36,13 @@ const PostView = (props: PostWithUser) => {
       <Image
         className="h-10 w-10 rounded-full"
         src={author.profileImageUrl}
-        alt={`${author.username} profile picture`}
+        alt={`${author.username || "author"} profile picture`}
         height={56}
         width={56}
       />
       <div className="flex flex-col">
         <div className="text-gray-400">
-          <span className="">{`@${author.username}`}</span>
+          <span className="">{`@${author.username || "not found"}`}</span>
           <span className="font-thin">{` • ${dayjs(
             post.createdAt
           ).fromNow()}`}</span>
@@ -54,7 +54,7 @@ const PostView = (props: PostWithUser) => {
 };
 
 const Feed = () => {
-  const { data, isLoading: postsLoading, error } = api.posts.getAll.useQuery();
+  const { data, isLoading: postsLoading } = api.posts.getAll.useQuery();
   if (postsLoading) return <LoadingPage />;
   if (!data) return <div>There is no data 😭</div>;
 

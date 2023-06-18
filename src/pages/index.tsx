@@ -1,12 +1,15 @@
 import Head from "next/head";
-import { api } from "~/utils/api";
+import { RouterOutputs, api } from "~/utils/api";
 import { SignIn, useUser } from "@clerk/nextjs";
 import { NextPage } from "next";
 import { Header } from "~/components/Header";
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
+
+dayjs.extend(relativeTime)
 
 const CreatePostForm = () => {
   const { user } = useUser();
-  console.log(user?.id)
   if (!user) return null;
   return (
     <form className="flex">
@@ -18,9 +21,30 @@ const CreatePostForm = () => {
   );
 };
 
-const PostView = () => {
-  
-}
+type PostWithUser = RouterOutputs["posts"]["getAll"][number];
+
+const PostView = (props: PostWithUser) => {
+  const { post, author } = props;
+  return (
+    <div
+      key={post.id}
+      className="flex items-center gap-2 rounded border border-gray-500/50 p-2"
+    >
+      <img
+        className="h-10 w-10 rounded-full"
+        src={author.profileImageUrl}
+        alt={author.username || "author profile pic"}
+      />
+      <div className="flex flex-col">
+        <div className="text-gray-400">
+          <span className="">{`@${author.username}`}</span>
+          <span className="font-thin">{` • ${dayjs(post.createdAt).fromNow()}`}</span>
+          </div>
+        <div>{post.content}</div>
+      </div>
+    </div>
+  );
+};
 
 const Home: NextPage = () => {
   const { data, isLoading, error } = api.posts.getAll.useQuery();
@@ -40,17 +64,12 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex flex-col items-center">
         <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
-        <div className="flex w-full flex-col container">
-          <Header/>
-          <CreatePostForm/>
+        <div className="container flex w-full flex-col">
+          <Header />
+          <CreatePostForm />
           <div className="flex flex-col gap-2">
-            {data?.map(({post, author}) => (
-              <div
-                key={post.id}
-                className="rounded border border-gray-500/50 p-2"
-              >
-                {post.content}
-              </div>
+            {data?.map((fullPost) => (
+              <PostView {...fullPost} key={fullPost.post.id} />
             ))}
           </div>
         </div>

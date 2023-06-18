@@ -1,17 +1,35 @@
 import Head from "next/head";
-import Link from "next/link";
 import { api } from "~/utils/api";
-import { SignIn, SignOutButton, useUser } from "@clerk/nextjs";
-import { ArrowRightOnRectangleIcon } from "@heroicons/react/20/solid";
+import { SignIn, useUser } from "@clerk/nextjs";
+import { NextPage } from "next";
+import { Header } from "~/components/Header";
 
-export default function Home() {
+const CreatePostForm = () => {
+  const { user } = useUser();
+  console.log(user?.id)
+  if (!user) return null;
+  return (
+    <form className="flex">
+      <input
+        placeholder="type some emojis!"
+        className="grow bg-transparent outline-none"
+      />
+    </form>
+  );
+};
+
+const PostView = () => {
+  
+}
+
+const Home: NextPage = () => {
   const { data, isLoading, error } = api.posts.getAll.useQuery();
 
   const user = useUser();
 
-  if(isLoading) return <div>Loading...</div>
+  if (isLoading) return <div>Loading...</div>;
 
-  if(!data) return <div>{error.message}</div>
+  if (!data) return <div>{error.message}</div>;
 
   return (
     <>
@@ -22,25 +40,23 @@ export default function Home() {
       </Head>
       <main className="flex flex-col items-center">
         <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
-        <div className="flex flex-col w-full md:max-w-3xl">
-          {!!user && (
-            <header className="flex justify-between items-end py-4">
-              <h1 className="font-semibold text-3xl">The T3 course app</h1>
-              <SignOutButton>
-                <button className="flex cursor-pointer items-center gap-2 rounded-lg bg-white px-4 py-2 font-semibold text-gray-900 hover:bg-gray-200 ">
-                  <ArrowRightOnRectangleIcon className="h-5 w-5" />
-                  <span>SignOut</span>
-                </button>
-              </SignOutButton>
-            </header>
-          )}
+        <div className="flex w-full flex-col container">
+          <Header/>
+          <CreatePostForm/>
           <div className="flex flex-col gap-2">
-            {data?.map((post) => (
-              <div key={post.id} className="border border-gray-500/50 p-2 rounded">{post.content}</div>
+            {data?.map(({post, author}) => (
+              <div
+                key={post.id}
+                className="rounded border border-gray-500/50 p-2"
+              >
+                {post.content}
+              </div>
             ))}
           </div>
         </div>
       </main>
     </>
   );
-}
+};
+
+export default Home;

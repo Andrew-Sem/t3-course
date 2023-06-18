@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Image from "next/image";
 import { RouterOutputs, api } from "~/utils/api";
 import { SignIn, useUser } from "@clerk/nextjs";
 import { NextPage } from "next";
@@ -30,10 +31,13 @@ const PostView = (props: PostWithUser) => {
       key={post.id}
       className="flex items-center gap-2 rounded border border-gray-500/50 p-2"
     >
-      <img
+      <Image
         className="h-10 w-10 rounded-full"
         src={author.profileImageUrl}
-        alt={author.username || "author profile pic"}
+        alt={`${author.username} profile picture`}
+        height={56}
+        width={56}
+        placeholder="blur"
       />
       <div className="flex flex-col">
         <div className="text-gray-400">

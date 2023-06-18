@@ -1,11 +1,12 @@
 import { SignOutButton, useUser } from "@clerk/nextjs";
 import { ArrowRightOnRectangleIcon } from "@heroicons/react/20/solid";
-import { FC } from "react"
+import Image from "next/image";
+import { FC } from "react";
 
-
-export const Header:FC = () => {
+export const Header: FC = () => {
   const user = useUser();
-  
+
+  if(!user.user) return null
 
   return (
     !!user && (
@@ -18,13 +19,16 @@ export const Header:FC = () => {
               <span>SignOut</span>
             </button>
           </SignOutButton>
-          <img
-        src={user.user?.profileImageUrl}
-        alt="Profile image"
-        className="h-10 w-10 rounded-full"
-      />
+          <Image
+            src={user.user.profileImageUrl}
+            alt="Profile image"
+            className="h-10 w-10 rounded-full"
+            width={56}
+            height={56}
+            placeholder="blur"
+          />
         </nav>
       </header>
     )
-  )
-}
+  );
+};

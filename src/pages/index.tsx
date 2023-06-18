@@ -4,10 +4,12 @@ import { RouterOutputs, api } from "~/utils/api";
 import { SignIn, useUser } from "@clerk/nextjs";
 import { NextPage } from "next";
 import { Header } from "~/components/Header";
-import dayjs from "dayjs"
-import relativeTime from "dayjs/plugin/relativeTime"
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { Loader, LoadingPage } from "~/components/UI/loading";
+import { TRPCError } from "@trpc/server";
 
-dayjs.extend(relativeTime)
+dayjs.extend(relativeTime);
 
 const CreatePostForm = () => {
   const { user } = useUser();
@@ -37,27 +39,41 @@ const PostView = (props: PostWithUser) => {
         alt={`${author.username} profile picture`}
         height={56}
         width={56}
-        placeholder="blur"
       />
       <div className="flex flex-col">
         <div className="text-gray-400">
           <span className="">{`@${author.username}`}</span>
-          <span className="font-thin">{` • ${dayjs(post.createdAt).fromNow()}`}</span>
-          </div>
+          <span className="font-thin">{` • ${dayjs(
+            post.createdAt
+          ).fromNow()}`}</span>
+        </div>
         <div>{post.content}</div>
       </div>
     </div>
   );
 };
 
+const Feed = () => {
+  const { data, isLoading: postsLoading, error } = api.posts.getAll.useQuery();
+  if (postsLoading) return <LoadingPage />;
+  if (!data) return <div>There is no data 😭</div>;
+
+  return (
+    <div className="flex flex-col gap-2">
+      {data?.map((fullPost) => (
+        <PostView {...fullPost} key={fullPost.post.id} />
+      ))}
+    </div>
+  );
+};
+
 const Home: NextPage = () => {
-  const { data, isLoading, error } = api.posts.getAll.useQuery();
+  const { isLoaded: userLoaded, isSignedIn } = useUser();
 
-  const user = useUser();
+  // start fetching asap
+  api.posts.getAll.useQuery();
 
-  if (isLoading) return <div>Loading...</div>;
-
-  if (!data) return <div>{error.message}</div>;
+  if (!userLoaded) return <LoadingPage />;
 
   return (
     <>
@@ -67,15 +83,13 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex flex-col items-center">
-        <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
+        {!isSignedIn && (
+          <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
+        )}
         <div className="container flex w-full flex-col">
           <Header />
           <CreatePostForm />
-          <div className="flex flex-col gap-2">
-            {data?.map((fullPost) => (
-              <PostView {...fullPost} key={fullPost.post.id} />
-            ))}
-          </div>
+          <Feed />
         </div>
       </main>
     </>

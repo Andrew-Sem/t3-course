@@ -4,9 +4,9 @@ import Image from "next/image";
 import { FC } from "react";
 
 export const Header: FC = () => {
-  const user = useUser();
+  const { user } = useUser();
 
-  if(!user.user) return null
+  if (!user) return null;
 
   return (
     !!user && (
@@ -20,12 +20,11 @@ export const Header: FC = () => {
             </button>
           </SignOutButton>
           <Image
-            src={user.user.profileImageUrl}
+            src={user.profileImageUrl}
             alt="Profile image"
             className="h-10 w-10 rounded-full"
             width={56}
             height={56}
-            placeholder="blur"
           />
         </nav>
       </header>

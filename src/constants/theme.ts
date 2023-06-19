@@ -1,4 +1,4 @@
-import {Theme} from "../models/Theme";
+import {type Theme} from "../models/Theme";
 import {ComputerDesktopIcon, MoonIcon, SunIcon} from "@heroicons/react/24/outline";
 
 export type Themes = {

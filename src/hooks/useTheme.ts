@@ -1,4 +1,4 @@
-import { Theme } from "~/models/Theme";
+import { type Theme } from "~/models/Theme";
 import { useState } from "react";
 import { themes } from "~/constants/theme";
 

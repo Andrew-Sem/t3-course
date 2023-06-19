@@ -1,12 +1,13 @@
 import { Listbox } from "@headlessui/react"
 import { ChevronDownIcon } from "@heroicons/react/24/outline"
-import { FC } from "react"
-import { Themes, themes } from "~/constants/theme"
+import { type FC } from "react"
+import { type Themes } from "~/constants/theme"
+import { type Theme } from "~/models/Theme"
 
 interface ListBoxProps {
     children: React.ReactNode,
-    selectedValue: any,
-    setSelectedValue: (arg0: any) => void,
+    selectedValue: Theme,
+    setSelectedValue: (arg0: Theme) => void,
     values: Themes
 }
 
@@ -21,7 +22,7 @@ export const ListBox: FC<ListBoxProps> = ({children, selectedValue, setSelectedV
             </Listbox.Button>
             <Listbox.Options
                 className={"absolute top-full right-0 mt-8 lg:mt-8 w-36 bg-white rounded-lg py-1 shadow-xl overflow-hidden dark:text-gray-300 dark:bg-gray-800"}>
-                {Object.values(themes).map((value) => (
+                {Object.values(values).map((value) => (
                     <Listbox.Option
                         key={value.id}
                         value={value}

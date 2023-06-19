@@ -4,7 +4,7 @@ export const Loader = (props: {size?:number}) => {
     <div role="status">
       <svg
         aria-hidden="true"
-        className="animate-spin fill-gray-300 text-white dark:text-slate-600"
+        className="animate-spin fill-white text-gray-700 dark:text-slate-800"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -28,6 +28,6 @@ export const Loader = (props: {size?:number}) => {
 
 export const LoadingPage = () => {
   return <div className="absolute top-0 left-0 h-screen w-screen flex justify-center items-center">
-    <Loader size={60}/>
+    <Loader size={50}/>
   </div>
 }

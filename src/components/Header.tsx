@@ -5,7 +5,7 @@ import {
   SunIcon,
 } from "@heroicons/react/20/solid";
 import Image from "next/image";
-import { useEffect, type FC } from "react";
+import { useEffect, type FC, useState } from "react";
 import { themes } from "~/constants/theme";
 import { useTheme } from "~/hooks/useTheme";
 import { ListBox } from "./UI/ListBox";
@@ -17,7 +17,7 @@ const ThemeSwitcher = () => {
     const theme = themes[themeName as "light" | "dark" | "system"] || themes.system
     setSelectedTheme(theme)
     
-  }, [setSelectedTheme]);
+  }, [setSelectedTheme, selectedTheme]);
   return (
     <div className={"relative"}>
       <ListBox

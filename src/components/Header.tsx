@@ -3,7 +3,7 @@ import {
   ArrowRightOnRectangleIcon,
   MoonIcon,
   SunIcon,
-} from "@heroicons/react/20/solid";
+} from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useEffect, type FC, useState } from "react";
 import { themes } from "~/constants/theme";

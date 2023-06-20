@@ -5,7 +5,7 @@ import {
   SunIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { useEffect, type FC, useState } from "react";
+import { useEffect, type FC } from "react";
 import { themes } from "~/constants/theme";
 import { useTheme } from "~/hooks/useTheme";
 import { ListBox } from "./UI/ListBox";

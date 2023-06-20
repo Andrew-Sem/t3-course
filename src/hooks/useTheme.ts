@@ -38,9 +38,9 @@ export const useTheme = () => {
 
     const switchSystemTheme = () => {
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            switchTheme(themes.dark); // Assuming themes[2] is the dark theme
+            switchTheme(themes.dark);
         } else {
-            switchTheme(themes.light); // Assuming themes[0] is the light theme
+            switchTheme(themes.light);
         }
     };
 

@@ -1,5 +1,5 @@
 import { type Theme } from "~/models/Theme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { themes } from "~/constants/theme";
 
 export const useTheme = () => {
@@ -35,6 +35,23 @@ export const useTheme = () => {
                 }
         }
     };
+
+    const switchSystemTheme = () => {
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            switchTheme(themes.dark); // Assuming themes[2] is the dark theme
+        } else {
+            switchTheme(themes.light); // Assuming themes[0] is the light theme
+        }
+    };
+
+    useEffect(() => {
+        const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+        mediaQueryList.addEventListener('change', switchSystemTheme);
+
+        return () => {
+            mediaQueryList.removeEventListener('change', switchSystemTheme);
+        };
+    }, []);
 
     return { selectedTheme, setSelectedTheme: switchTheme };
 };

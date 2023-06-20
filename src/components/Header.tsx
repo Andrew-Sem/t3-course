@@ -17,7 +17,7 @@ const ThemeSwitcher = () => {
     const theme = themes[themeName as "light" | "dark" | "system"] || themes.system
     setSelectedTheme(theme)
     
-  }, [setSelectedTheme, selectedTheme]);
+  }, []);
   return (
     <div className={"relative"}>
       <ListBox

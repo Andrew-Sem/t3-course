@@ -8,7 +8,7 @@ import { Header } from "~/components/Header";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Loader, LoadingPage } from "~/components/UI/loading";
-import { FormEvent, useState } from "react";
+import { type FormEvent, useState } from "react";
 import { toast } from "react-hot-toast";
 
 dayjs.extend(relativeTime);
@@ -23,7 +23,7 @@ const CreatePostForm = () => {
   const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
     onSuccess: () => {
       setInput("");
-      ctx.posts.getAll.invalidate();
+      void ctx.posts.getAll.invalidate();
     },
     onError: (e) => {
       const errorMessage = e.data?.zodError?.fieldErrors.content;

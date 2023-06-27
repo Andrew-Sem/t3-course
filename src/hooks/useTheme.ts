@@ -37,11 +37,7 @@ export const useTheme = () => {
     };
 
     const switchSystemTheme = () => {
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            switchTheme(themes.dark);
-        } else {
-            switchTheme(themes.light);
-        }
+        switchTheme(themes.system)
     };
 
     useEffect(() => {

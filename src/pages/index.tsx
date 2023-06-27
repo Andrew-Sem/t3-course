@@ -7,8 +7,9 @@ import type { NextPage } from "next";
 import { Header } from "~/components/Header";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { LoadingPage } from "~/components/UI/loading";
+import { Loader, LoadingPage } from "~/components/UI/loading";
 import { FormEvent, useState } from "react";
+import { toast } from "react-hot-toast";
 
 dayjs.extend(relativeTime);
 
@@ -17,19 +18,27 @@ const CreatePostForm = () => {
 
   const [input, setInput] = useState("");
 
-  const ctx = api.useContext()
+  const ctx = api.useContext();
 
   const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
     onSuccess: () => {
-      setInput("")
-      ctx.posts.getAll.invalidate()
-    }
+      setInput("");
+      ctx.posts.getAll.invalidate();
+    },
+    onError: (e) => {
+      const errorMessage = e.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        toast.error(errorMessage[0]);
+      } else {
+        toast.error("Failed to post! Please try again later.");
+      }
+    },
   });
 
-  const formSubmit = (e:FormEvent) => {
-    e.preventDefault()
-    mutate({ content: input })
-  }
+  const formSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (input !== "") mutate({ content: input });
+  };
 
   if (!user) return null;
   return (
@@ -40,11 +49,13 @@ const CreatePostForm = () => {
         className="grow bg-transparent outline-none"
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        disabled={isPosting}
       />
-      <button type="submit">
-        Post
-      </button>
+      {input !== "" && !isPosting && (
+        <button type="submit" disabled={isPosting}>
+          Post
+        </button>
+      )}
+      {isPosting && <Loader />}
     </form>
   );
 };

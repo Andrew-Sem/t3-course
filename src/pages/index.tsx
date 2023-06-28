@@ -10,6 +10,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { Loader, LoadingPage } from "~/components/UI/loading";
 import { type FormEvent, useState } from "react";
 import { toast } from "react-hot-toast";
+import Link from "next/link";
 
 dayjs.extend(relativeTime);
 
@@ -78,10 +79,14 @@ const PostView = (props: PostWithUser) => {
       />
       <div className="flex flex-col">
         <div className="text-gray-400">
-          <span className="">{`@${author.username || "not found"}`}</span>
-          <span className="font-thin">{` • ${dayjs(
-            post.createdAt
-          ).fromNow()}`}</span>
+          <Link href={`@${author.username || "not-found"}`}>
+            <span className="">{`@${author.username || "not found"}`}</span>
+          </Link>
+          <Link href={`/post/${post.id}`}>
+            <span className="font-thin">{` • ${dayjs(
+              post.createdAt
+            ).fromNow()}`}</span>
+          </Link>
         </div>
         <div className="text-2xl">{post.content}</div>
       </div>

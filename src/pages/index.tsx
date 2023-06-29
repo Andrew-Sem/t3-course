@@ -1,15 +1,15 @@
 import Image from "next/image";
 import { api } from "~/utils/api";
 import type { RouterOutputs } from "~/utils/api";
-import { SignIn, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import type { NextPage } from "next";
-import { Header } from "~/components/Header";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { Loader, LoadingPage } from "~/components/UI/loading";
 import { type FormEvent, useState } from "react";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
+import { PageLayout } from "~/components/Layout";
 
 dayjs.extend(relativeTime);
 
@@ -108,7 +108,7 @@ const Feed = () => {
 };
 
 const Home: NextPage = () => {
-  const { isLoaded: userLoaded, isSignedIn } = useUser();
+  const { isLoaded: userLoaded } = useUser();
 
   // start fetching asap
   api.posts.getAll.useQuery();
@@ -116,16 +116,10 @@ const Home: NextPage = () => {
   if (!userLoaded) return <LoadingPage />;
 
   return (
-      <main className="flex flex-col items-center bg-gray-50 text-gray-800 dark:bg-gray-950 dark:text-gray-100">
-        {!isSignedIn && (
-          <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
-        )}
-        <Header />
-        <div className="container flex w-full flex-col">
-          <CreatePostForm />
-          <Feed />
-        </div>
-      </main>
+    <PageLayout>
+      <CreatePostForm />
+      <Feed />
+    </PageLayout>
   );
 };
 

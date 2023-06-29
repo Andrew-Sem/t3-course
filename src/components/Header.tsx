@@ -19,7 +19,7 @@ const ThemeSwitcher = () => {
     setSelectedTheme(theme);
   }, [setSelectedTheme]);
   return (
-    <div className={"relative"}>
+    <div className={"relative z-10"}>
       <ListBox
         selectedValue={selectedTheme}
         setSelectedValue={setSelectedTheme}
@@ -47,7 +47,7 @@ export const Header: FC = () => {
 
   return (
     !!user && (
-      <header className="flex w-full bg-gray-50 dark:bg-neutral-950">
+      <header className="flex w-full bg-gray-50 dark:bg-neutral-950 relative">
         <div className="container mx-auto flex w-full items-end justify-between py-4">
           <h1 className="text-3xl font-semibold">The T3 course app</h1>
           <nav className="flex gap-4">

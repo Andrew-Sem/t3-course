@@ -18,13 +18,13 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
       </Head>
       <PageLayout>
         <div>
-          <div className="relative h-56 bg-slate-200">
+          <div className="relative h-56 bg-slate-200 dark:bg-slate-800 rounded-lg">
             <Image
               src={data.profileImageUrl}
               alt={`${data.username || ""}'s profile pic`}
               width={192}
               height={192}
-              className="absolute -bottom-[96px] left-4 rounded-full border- border-black"
+              className="absolute -bottom-[96px] left-4 rounded-full border border-slate-700"
             />
           </div>
           <div className="h-[96px]"></div>
